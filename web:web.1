@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JOJO</title>
+  <style media="screen">
+    canvas{
+      border: 1px black solid;
+    }
+  </style>
+</head>
+<body>
+<canvas id="id-canvas" width="1000" height="1300"></canvas>
+<script>
+  var log = console.log.bind(console)
+
+  var imageFromPath = function (path) {
+    var image = new Image()
+    image.src = path
+    return image
+  }
+
+  var Paddle = function () {
+    var image =imageFromPath('123.png')
+      var o = {
+          image:image,
+          x:100,
+          y:200,
+          speed:5,
+      }
+      var paddle = o
+      o.moveLeft = function () {
+        paddle.x -= paddle.speed
+      }
+    o.moveRight = function () {
+      paddle.x += paddle.speed
+    }
+      return o
+  }
+
+  var Game = function () {
+    var g = {}
+    var canvas = document.querySelector('#id-canvas')
+    var context = canvas.getContext('2d')
+    g.camvas = canvas
+    g.context = context
+
+    setInterval(function () {
+      //updata
+      g.update()
+      //clear
+      context.clearRect(0,0,canvas.width,canvas.height)
+      //draw
+      g.draw()
+    },1000/30)
+    return g
+  }
+
+
+  var _main = function () {
+    var game = new Game()
+
+
+    var paddle = Paddle()
+
+    var leftDown = false
+    var rightDown = false
+    //event
+    window.addEventListener('keydown', function (event) {
+      log('keydown')
+      var k = event.key
+      // log(event)
+      if (k == 'a') {
+        leftDown = true
+      } else if (k == 'd') {
+        rightDown = true
+      }
+    })
+
+    window.addEventListener('keyup', function (event) {
+      log('keyup')
+      var k = event.key
+      // log(event)
+      if (k == 'a') {
+        leftDown = false
+      } else if (k == 'd') {
+        rightDown = false
+      }
+    })
+
+
+    game.update = function () {
+      if (leftDown) {
+        paddle.moveLeft()
+      } else if (rightDown) {
+        paddle.moveRight()
+      }
+    }
+    game.draw = function () {
+      game.context.drawImage(paddle.image, paddle.x, paddle.y)
+    }
+  }
+
+  _main()
+</script>
+</body>
+</html>
